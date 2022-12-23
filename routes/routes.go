@@ -34,3 +34,21 @@ func GetPosts(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusOK)
 	res.Write(result)
 }
+
+func AddPost(res http.ResponseWriter, req *http.Request) {
+	var post Post
+	err := json.NewDecoder(req.Body).Decode(&post)
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{"error"}: "Error marshaling"`))
+		return
+	}
+
+	post.Id = len(posts) + 1
+	posts = append(posts, post)
+
+	res.WriteHeader(http.StatusOK)
+	result, err := json.Marshal(post)
+	res.Write(result)
+
+}
