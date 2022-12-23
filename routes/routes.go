@@ -22,7 +22,7 @@ func init() {
 
 func GetPosts(res http.ResponseWriter, req *http.Request) {
 
-	res.Header().Set("Content-type", "application/json")
+	// res.Header().Set("Content-type", "application/json")
 	result, err := json.Marshal(posts)
 
 	if err != nil {
