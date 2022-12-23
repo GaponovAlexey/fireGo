@@ -2,54 +2,47 @@ package routes
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
+	"server/firebase/entity"
+	"server/firebase/repo"
 
 )
-
-type Post struct {
-	Id    int    `json:"id"` // Все должни быть уникальными 
-	Title string `json:"title"`
-	Text  string `json:"text"`
-}
 
 var (
-	posts []Post
+	repos repo.PostRepo = repo.NewRepository()
 )
-
-func init() {
-	posts = []Post{Post{Id: 1, Title: "title 1", Text: "text 1"}}
-}
 
 func GetPosts(res http.ResponseWriter, req *http.Request) {
 
-	res.Header().Set("Content-type", "application/json")
-	result, err := json.Marshal(posts)
-
+	// res.Header().Set("Content-type", "application/json")
+	
+	posts, err := repos.FindlAll()
+	log.Println("posts",posts)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
-		res.Write([]byte(`{"error"}: "Error marshaling"`))
+		res.Write([]byte(`{"error"}: "Getting the post"`))
 		return
 	}
 
 	res.WriteHeader(http.StatusOK)
-	res.Write(result)
+	json.NewEncoder(res).Encode(posts)
+	// res.Write(posts)
 }
 
 func AddPost(res http.ResponseWriter, req *http.Request) {
-	var post Post                                  // наследуется от массива
+	var post entity.Post 
 	err := json.NewDecoder(req.Body).Decode(&post) //что бы прочитать  боди или ответ пустой прийдет
-	
+
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{"error"}: "Error marshaling"`))
 		return
 	}
+	
 
-	post.Id = len(posts) + 1 // проверяет длину и добавлят + 1 это если не указывать в боди
-	posts = append(posts, post) // вот тут записывает в сам обжект
-
+	repos.Save(&post)
 	res.WriteHeader(http.StatusOK)
-	result, _ := json.Marshal(post) // розпечатывает для отправки 
-	res.Write(result)
-
+	
+	json.NewEncoder(res).Encode(post)
 }
