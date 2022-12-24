@@ -5,7 +5,7 @@ import (
 	"log"
 	"server/firebase/entity"
 
-	"cloud.google.com/go/firestore"
+	// "cloud.google.com/go/firestore"
 
 )
 
@@ -27,16 +27,13 @@ const (
 )
 
 func (*repo) Save(post *entity.Post) (*entity.Post, error) {
-	ctx := context.Background()
-	client, err := firestore.NewClient(ctx, projectId)
+	app := initializeAppWithServiceAccount()
 
-	if err != nil {
-		return nil, err
-	}
+	app.Firestore()
 
-	defer client.Close()
 
-	_, _, err = client.Collection(collectionName).Add(ctx, map[string]interface{}{
+
+	_, _, err = app.Collection(collectionName).Add(ctx, map[string]interface{}{
 		"Company": post.Company,
 		"Email":   post.Email,
 		"Name":    post.Name,
@@ -52,16 +49,19 @@ func (*repo) Save(post *entity.Post) (*entity.Post, error) {
 }
 
 func (*repo) FindlAll() ([]entity.Post, error) {
+
 	ctx := context.Background()
-	client, err := firestore.NewClient(ctx, projectId)
+	
+	client, err := firestore.NewClient(ctx, "../key.json")
 	if err != nil {
+		log.Fatalf("new Client don't find %v", err)
 		return nil, err
 	}
 	defer client.Close()
 	var posts []entity.Post
 	iterator := client.Collection(collectionName).Documents(ctx)
-  
-  log.Println("iterator",iterator)
+
+	log.Println("iterator", iterator)
 
 	for {
 		doc, err := iterator.Next()
