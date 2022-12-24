@@ -28,12 +28,12 @@ const (
 
 func (*repo) Save(post *entity.Post) (*entity.Post, error) {
 	app := initializeAppWithServiceAccount()
+	ctx := context.Background()
+	client, err := app.Messaging(ctx)
 
-	app.Firestore()
 
 
-
-	_, _, err = app.Collection(collectionName).Add(ctx, map[string]interface{}{
+	_, _, err = repo.Collection(collectionName).Add(ctx, map[string]interface{}{
 		"Company": post.Company,
 		"Email":   post.Email,
 		"Name":    post.Name,
