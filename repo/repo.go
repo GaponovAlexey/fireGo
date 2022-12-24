@@ -32,10 +32,9 @@ func (*repo) Save(post *entity.Post) (*entity.Post, error) {
 	client, err := firestore.NewClient(ctx, projectId)
 
 	if err != nil {
+		log.Fatalf("Messasing err!!!", err)
 		return nil, err
 	}
-
-	defer client.Close()
 
 	_, _, err = client.Collection(collectionName).Add(ctx, map[string]interface{}{
 		"Company": post.Company,
@@ -53,8 +52,10 @@ func (*repo) Save(post *entity.Post) (*entity.Post, error) {
 }
 
 func (*repo) FindlAll() ([]entity.Post, error) {
+
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
+
 	if err != nil {
 		log.Fatalln("Mi FATAL", err)
 		return nil, err

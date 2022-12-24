@@ -24,6 +24,8 @@ func GetPosts(res http.ResponseWriter, req *http.Request) {
 	}
 
 	res.WriteHeader(http.StatusOK)
+	
+	
 	json.NewEncoder(res).Encode(posts)
 }
 
