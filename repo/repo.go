@@ -27,6 +27,7 @@ const (
 )
 
 func (*repo) Save(post *entity.Post) (*entity.Post, error) {
+
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
 
@@ -55,26 +56,26 @@ func (*repo) FindlAll() ([]entity.Post, error) {
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
 	if err != nil {
+		log.Fatalln("Mi FATAL", err)
 		return nil, err
 	}
 	defer client.Close()
 	var posts []entity.Post
 	iterator := client.Collection(collectionName).Documents(ctx)
-  
-  log.Println("iterator",iterator)
 
 	for {
 		doc, err := iterator.Next()
+		log.Println("DAAAATA",doc.Data())
 		if err != nil {
 			log.Fatalln("Failed adding the FinalAll", err)
 			return nil, err
 		}
 		post := entity.Post{
-			Company: doc.Data()["Company"].(string),
-			Email:   doc.Data()["Email"].(string),
-			Name:    doc.Data()["Name"].(string),
-			Message: doc.Data()["Message"].(string),
-			Number:  doc.Data()["Number"].(string),
+			Company: doc.Data()["company"].(string),
+			Email:   doc.Data()["email"].(string),
+			Name:    doc.Data()["name"].(string),
+			Message: doc.Data()["message"].(string),
+			Number:  doc.Data()["number"].(string),
 		}
 		posts = append(posts, post)
 	}
