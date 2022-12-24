@@ -2,9 +2,9 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
-	"server/firebase/entity"
+	// "server/firebase/entity"
 	"server/firebase/repo"
 
 )
@@ -14,11 +14,10 @@ var (
 )
 
 func GetPosts(res http.ResponseWriter, req *http.Request) {
-
 	// res.Header().Set("Content-type", "application/json")
-	fmt.Println("Repos")
 	
 	posts, err := repos.FindlAll()
+	log.Println(posts)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{"error"}: "Getting the post"`))
@@ -26,25 +25,25 @@ func GetPosts(res http.ResponseWriter, req *http.Request) {
 	}
 
 	res.WriteHeader(http.StatusOK)
-	fmt.Println(posts)
+	
 	
 	json.NewEncoder(res).Encode(posts)
-	// res.Write(posts)
+	log.Println("END!!!")
 }
 
-func AddPost(res http.ResponseWriter, req *http.Request) {
-	var post entity.Post 
-	err := json.NewDecoder(req.Body).Decode(&post) //что бы прочитать  боди или ответ пустой прийдет
+// func AddPost(res http.ResponseWriter, req *http.Request) {
+// 	var post entity.Post 
+// 	err := json.NewDecoder(req.Body).Decode(&post) //что бы прочитать  боди или ответ пустой прийдет
 
-	if err != nil {
-		res.WriteHeader(http.StatusInternalServerError)
-		res.Write([]byte(`{"error"}: "Error marshaling"`))
-		return
-	}
+// 	if err != nil {
+// 		res.WriteHeader(http.StatusInternalServerError)
+// 		res.Write([]byte(`{"error"}: "Error marshaling"`))
+// 		return
+// 	}
 	
 
-	repos.Save(&post)
-	res.WriteHeader(http.StatusOK)
+// 	repos.Save(&post)
+// 	res.WriteHeader(http.StatusOK)
 	
-	json.NewEncoder(res).Encode(post)
-}
+// 	json.NewEncoder(res).Encode(post)
+// }

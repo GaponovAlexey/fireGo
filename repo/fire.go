@@ -11,11 +11,10 @@ import (
 
 func initializeAppWithServiceAccount() *firebase.App {
 	// [START initialize_app_service_account_golang]
-	opt := option.WithCredentialsFile("../key.json")
-  config := &firebase.Config{ProjectID: "yoursuccess-e1c07"}
-	app, err := firebase.NewApp(context.Background(), config, opt)
+	opt := option.WithCredentialsFile("key.json")
+	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
-		log.Fatalf("error initializing app: %v\n", err)
+		log.Fatalf("Mi error initializing app: %v\n", err)
 	}
 	// [END initialize_app_service_account_golang]
 
