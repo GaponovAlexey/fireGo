@@ -1,16 +1,18 @@
 package main
 
-import "log"
+import (
+	"fmt"
+	"unsafe"
+
+)
 
 func main() {
-	var x = []interface{}{1, 2, 3}
-	s := 0
-	for s >= 100 {
-		s++
-		log.Println(x)
-		i := 2
-		x = append(x, i)
-	}
-	log.Println(x)
+  var a uint8 =  22
+  var b int =  22
+  var c int8 =  22
+
+	fmt.Println(unsafe.Sizeof(a))
+	fmt.Println(unsafe.Sizeof(b))
+	fmt.Println(unsafe.Sizeof(c))
 
 }

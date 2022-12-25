@@ -21,9 +21,10 @@ func NewRepository() PostRepo {
 	return &repo{}
 }
 
-const (
+var (
 	projectId      string = "yoursuccess-e1c07"
 	collectionName string = "users"
+	posts                 = []entity.Post{}
 )
 
 func (*repo) Save(post *entity.Post) (*entity.Post, error) {
@@ -37,11 +38,11 @@ func (*repo) Save(post *entity.Post) (*entity.Post, error) {
 	}
 
 	_, _, err = client.Collection(collectionName).Add(ctx, map[string]interface{}{
-		"Company": post.Company,
-		"Email":   post.Email,
-		"Name":    post.Name,
-		"Message": post.Message,
-		"Number":  post.Number,
+		"company": post.Company,
+		"email":   post.Email,
+		"name":    post.Name,
+		"message": post.Message,
+		"number":  post.Number,
 	})
 	if err != nil {
 		log.Fatalln("Failed adding the new post", err)
@@ -52,10 +53,8 @@ func (*repo) Save(post *entity.Post) (*entity.Post, error) {
 }
 
 func (*repo) FindlAll() ([]entity.Post, error) {
-
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, projectId)
-
 	if err != nil {
 		log.Fatalln("Mi FATAL", err)
 		return nil, err
@@ -63,27 +62,22 @@ func (*repo) FindlAll() ([]entity.Post, error) {
 	defer client.Close()
 	iterator := client.Collection(collectionName).Documents(ctx)
 
-	posts := make([]entity.Post, 0)
-	// x := 0
 	for {
-		doc, err := iterator.Next()
-
+		v, err := iterator.Next()
 		if err != nil {
 			log.Fatalln("Failed adding the FinalAll", err)
 			return nil, err
 		}
+
 		post := entity.Post{
-			Company: doc.Data()["company"].(string),
-			Email:   doc.Data()["email"].(string),
-			Name:    doc.Data()["name"].(string),
-			Message: doc.Data()["message"].(string),
-			Number:  doc.Data()["number"].(string),
+			Company: v.Data()["company"].(string),
+			Email:   v.Data()["email"].(string),
+			Name:    v.Data()["name"].(string),
+			Message: v.Data()["message"].(string),
+			Number:  v.Data()["number"].(string),
 		}
 		posts = append(posts, post)
-
 	}
-	log.Println("posts end Find All", posts)
-
 	return posts, nil
 
 }
