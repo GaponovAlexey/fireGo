@@ -61,12 +61,13 @@ func (*repo) FindlAll() ([]entity.Post, error) {
 		return nil, err
 	}
 	defer client.Close()
-	var posts []entity.Post
 	iterator := client.Collection(collectionName).Documents(ctx)
 
+	posts := make([]entity.Post, 0)
+	// x := 0
 	for {
 		doc, err := iterator.Next()
-		log.Println("DAAAATA",doc.Data())
+
 		if err != nil {
 			log.Fatalln("Failed adding the FinalAll", err)
 			return nil, err
@@ -79,6 +80,10 @@ func (*repo) FindlAll() ([]entity.Post, error) {
 			Number:  doc.Data()["number"].(string),
 		}
 		posts = append(posts, post)
+
 	}
+	log.Println("posts end Find All", posts)
+
 	return posts, nil
+
 }

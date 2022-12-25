@@ -2,6 +2,7 @@ package routes
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"server/firebase/entity"
 	"server/firebase/repo"
@@ -17,15 +18,16 @@ func GetPosts(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-type", "application/json")
 	
 	posts, err := repos.FindlAll()
+	log.Println("POSTS findAll", posts)
+	
 	if err != nil {
+		log.Println("FINDALL DON't WORK")
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{"error"}: "Getting the post"`))
 		return
 	}
 
 	res.WriteHeader(http.StatusOK)
-	
-	
 	json.NewEncoder(res).Encode(posts)
 }
 
