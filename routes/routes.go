@@ -30,6 +30,7 @@ func GetPosts(res http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(res).Encode(posts)
 }
 
+
 func AddPost(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-type", "application/json")
 	var post entity.Post
