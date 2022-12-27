@@ -44,7 +44,9 @@ func AddPost(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	log.Println("POST", post)
+
+
+	log.Println("POSTs", post)
 
 	repos.Save(&post)
 	res.WriteHeader(http.StatusOK)
