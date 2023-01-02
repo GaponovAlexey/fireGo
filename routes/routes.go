@@ -32,21 +32,21 @@ func GetPosts(res http.ResponseWriter, req *http.Request) {
 
 func AddPost(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("Content-type", "application/json")
+
 	var post entity.Post
+	
 	err := json.NewDecoder(req.Body).Decode(&post) //что бы прочитать  боди или ответ пустой прийдет
 
 	log.Println("BODYYYY", post)
+
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{"error"}: "Error marshaling"`))
 		return
 	}
 
-	
-
-	log.Println("POSTs", post)
-
 	repos.Save(&post)
+	
 	res.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(res).Encode(post)
