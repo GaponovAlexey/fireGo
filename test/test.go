@@ -1,18 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"unsafe"
+	"log"
 
 )
 
 func main() {
-  var a uint8 =  22
-  var b int =  22
-  var c int8 =  22
+	s := "lll"
 
-	fmt.Println(unsafe.Sizeof(a))
-	fmt.Println(unsafe.Sizeof(b))
-	fmt.Println(unsafe.Sizeof(c))
+	log.Println(s)
 
+	newS := &s
+
+	change(newS)
+
+	log.Println(s)
+
+}
+
+func change(str *string) {
+	*str = "LOL"
 }
